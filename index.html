@@ -1,0 +1,118 @@
+<!--
+    Title: index.html
+    Author: John Vanhessche
+    Date: 8/13/2022
+    Description: Landing page for WEB-330
+    
+    History:
+    8/13/2022 - Created landing page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="stylesheet" type="text/css" href="./theme.css"/>
+    <link rel="stylesheet" type="text/css" href="./site.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="application/javascript" src="./theme.js"></script>
+   
+    <title>WEB 330</title>
+</head>
+<body class="light-theme">
+
+    <!--The only thing that isn't working the way I want is the placement of the icon.  I had to use a break statement to put it at the top of the page
+    I'm also seeing that the toggleMode onclick event, alters the orientation of the icon to make it appear like a slider.-->
+
+    <i onclick="toggleMode(this)" id="icon-mode" class="fa fa-toggle=off pull-right" style="font-size: 28px;"><span id="icon-text"></span></i>
+    <br>
+    <div id="container">
+        
+        <h1>John Vanhessche's Landing Page</h1>
+        <h2>WEB 330 Enterprise JavaScript II</h2>
+        <hr>
+        <h3>Weekly assignments</h3>
+        <ul>
+            <li>Assignment 2.2</li>
+            <li>Assignment 3.2</li>
+            <li>Assignment 4.2</li>
+            <li>Assignment 5.2</li> 
+            <li>Assignment 6.2</li>
+            <li>Assignment 7.2</li>
+            <li>Assignment 8.2</li>            
+        </ul>
+        <h3>Projects</h3>
+        <ul>
+            <li>Portfolio</li>
+            <li>WEB 330 Landing Page</li>
+        </ul>
+        <h4>Important Links</h4>
+        
+        <ul>
+            <li><a href="https://github.com/buwebdev/web-330 ">WEB 231's GitHub Repository</a></li>
+            <li><a href="https://bruinconnect.bellevue.edu/ ">BRUIN Connect</a></li>
+            <li><a href="https://validator.w3.org/  ">W3C HTML Validator</a></li>
+            <li><a href="http://jigsaw.w3.org/css-validator/ ">W3C CSS Validator</a></li>
+            <li><a href="https://www.w3schools.com/html/">HTML Tutorial</a></li>
+            <li><a href="https://www.w3schools.com/js/js_best_practices.asp  ">JavaScript Best Practices</a></li>
+        </ul>
+    </div>
+    <script>
+        
+        //set default theme to light-mode if not set in localStorage on page load.
+        //
+        setDefaultTheme();          
+
+        //Function to switch user theme
+        //
+
+        function toggleMode(x) {
+            //assigning document body class list to colorTheme           
+            let colorTheme = document.body.classList;
+
+            //assigning current class of icon to iconMode
+            let iconMode = x.classList;
+
+            //if function to toggle between the two settings - light and dark.  Since we aren't calling clearLocalStorage the items in localStorage don't change
+            //when viewing in dev tools.
+            //            
+            if (colorTheme.value==="light-theme") {
+
+                localStorage.clear();                               
+                localStorage.setItem("mode", "dark-theme");
+                localStorage.setItem("iconMode", "fa-toggle-on");
+                localStorage.setItem("iconText", "Dark Mode");
+            }
+
+            //The else covers the user setting of dark-theme.
+            else {
+
+                localStorage.clear();                               
+                localStorage.setItem("mode", "light-theme");
+                localStorage.setItem("iconMode", "fa-toggle-off");
+                localStorage.setItem("iconText", "Light Mode");
+            }
+
+            //Updating HTML, and applying the settings.  
+
+            colorTheme.value = localStorage.getItem("mode");
+            iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+            document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
+
+        };
+
+
+        //I built the clearLocalStorage function as a reference, even though we aren't calling it.  
+        function clearLocalStorage() {
+
+            localStorage.clear();
+            document.body.classList.value = "light-theme";
+            document.getElementById("icon-text").innerHTML = "Light Mode";
+            document.getElementById("icon-mode").classList.value("fa fa-toggle-off pull-right");
+        }
+    </script>
+</body>
+</html>

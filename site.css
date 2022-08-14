@@ -1,0 +1,71 @@
+/*
+============================================
+; Title:  site.css
+; Author: John Vanhessche
+; Date:   8/13/2022
+; Description: site.css common for all solutions
+;===========================================
+*/
+
+#container {
+    margin-top: 50px;;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+#icon-mode:hover {
+    cursor: pointer;
+}
+
+#icon-text {
+    padding-left: 10px;
+}
+
+.pull-right {
+    float: right;
+}
+
+.app-header {
+    text-align: center;
+}
+
+.return-home {
+    color: #4F3674;
+    text-decoration: none;  
+}
+
+.return-home:hover {
+    background-color: #D6A800;
+    color: #4F3674;
+}
+
+.return-home:visited {
+    color: #3C275A;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.form {
+    display: inline-grid;
+    grid-template-columns: auto;
+}
+
+.form-field {
+    padding: 20px;
+}
+
+.assign-container {
+    padding: 10px;
+}
+
+.assign-content {
+    width: 600px;
+    margin: 3% auto 0;
+}
+
+.assign-results-txt {
+    text-align: center;
+    font-size: 28px;
+}
