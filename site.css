@@ -70,6 +70,12 @@
     font-size: 28px;
 }
 
+#assign-results {
+    text-align: center;
+    font-size: 28px;
+}
+
+
 /* For assignment 2.2, added the following for styling on the results app header */
 #assign-results-header {
     text-align: left;
