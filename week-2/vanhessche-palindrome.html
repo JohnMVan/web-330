@@ -1,0 +1,163 @@
+<!--
+    ===============================================
+    Title: vanhessche-palindrome.html
+    Author: John Vanhessche, see line 105
+    Date: 8/21/2022
+    Description: Palindrome app for assignment 2.2
+    ================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css"/>
+    <link rel="stylesheet" type="text/css" href="../site.css"/>
+    <link rel="stylesheet" type="text/css" href="./vanhessche-palindrome.css"/>     
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>Palindrome App</title>
+</head>
+<body class="light-theme">
+    <!--container wrapper for a card.-->
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the Palindrome App</h1>
+
+        <!--container wrapper for form-->
+        <div class="assign-content">
+            
+            <!--card with a card title and card content-->
+            <div class="card">
+                <div class="card-title">Palindrome Checker</div>
+                <div class="card-content">
+                    <div class="form">
+                        <div class="form-field">
+                            <label for="txtPhrase">Phrase value:</label>
+                            <input type="text" class="input" id="txtPhrase" name="myName" />
+                        </div>
+
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnCheckPhrase">Submit</button>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <!--end card-->
+        </div>
+        <!--end assign-content-->
+        
+    </div>  
+    <!--end assign-container-->
+
+    <!--container wrapper for a card-->
+    <div class="assign-container">
+
+        <!--container wrapper for a card-->
+        <div class="assign-content">
+
+            <!--card with a card title, card content, and assign-results-text-->
+            <div class="card">
+                <div class="card-title">
+                    Palindrome Results
+                </div>
+
+                <div class="card-content assign-results-text">
+                    <div id="assign-results-header"></div>
+                    <div id="assign-results" class="assign-results-text"></div>
+                </div>
+            </div>
+            <br><br>
+            <a class="return-home" href="../index.html">Return</a>
+            <!--end card-->
+        </div>
+        <!--end assign-content-->
+    </div>
+    <!--end assign-container-->
+    <script>
+
+        //TODO:  Fix 
+        //I had to comment this out, because I can't get the theme to work
+        //setSelectedTheme();
+        
+        // date function to return m/d/yyyy formatted date.
+        function getTodaysDate() {
+
+            // creating new date object with en-US as parameter
+            const date = new Date().toLocaleDateString('en-US');
+            return date;
+        };
+
+        //Function to evaluate the length of the inputted phrase.  At present, spaces and punctuation are included in the total.
+        function getLength(string) {
+            return string.length;            
+        };
+
+        //function to create a reverse text of the txtPhrase (string parameter).
+        function reverse(string) {
+           const phraseArray = string.split("");
+            phraseArray.reverse();
+            let newPhraseArray = phraseArray.join("");
+            return newPhraseArray;            
+        };
+
+        //function to determine if palindrome is true or not.
+
+        //Found this idea for this function on this page (https://www.freecodecamp.org/news/two-ways-to-check-for-palindromes-in-javascript-64
+        //fea8191fd7/#:~:text=function%20palindrome(str)%20%7B%20var%20re%20%3D%20%2F%5B%5EA,if%20(str%5Bi%5D%20!%3D%3D)
+
+        //I wanted a function that would check for phrases as well as single words.   
+        function isPalindrome(string) {
+            let result = true;
+
+            //set reg expression to search for unwanted characters (spaces and punctuation)
+            let phrase = /[\W_]/g;
+
+            //setting two variables forward and reverse string, then setting to lowercase, and using regexp to find unwanted characters and replaces with nospace.
+            let forwardString = string.toLowerCase().replace(phrase,'');
+
+            //reversing the string from forwardString, splits at each character, then joining it back into a phrase without spaces or punctuation
+            let reverseString = forwardString.split('').reverse().join('');     
+            
+            //comparing forward and reverse.  sending true if they match, false if they don't.
+            //test cases: === racecar {or} race car = true;  richard = false; 123321 = true; 123123 = false;  1 23 21 3 = false; 
+            //                never odd or even = true;  never odd but even = false;  
+            if (forwardString===reverseString ? result = true : result = false);   
+            
+            //return boolean result.
+            return result;
+        };
+
+        //button click event, captures phrase, returns today's date and phrase length
+        //passes txtPhrase to reverse function to reverse it
+        document.getElementById("btnCheckPhrase").onclick = function() {
+            //assignment of required variables
+            let txtPhrase = document.getElementById("txtPhrase").value;
+            let assignResults = document.getElementById("assign-results");
+            let today = getTodaysDate();            
+            let len = getLength(txtPhrase);
+            let reversedPhrase = reverse(txtPhrase);
+            
+            //building a string output for header variable and assigning to the assign-results-text div
+            let header = `Date: ${today}<br>Original Phrase: ${txtPhrase}<br>Reversed Phrase: ${reversedPhrase}<br>Phrase Length: ${len}<br>`;
+            document.getElementById("assign-results-header").innerHTML = header;
+                        
+
+            //if statement to return is or is not a palindrome based on txtPhrase function.
+            //output assigned to innerResults variable.
+            if (isPalindrome(txtPhrase.toLowerCase())===true) {
+              assignResults.innerHTML = `${txtPhrase.toLowerCase()} <u><b>is</b></u> a palindrome!`;
+            }
+            else {
+                assignResults.innerHTML = `${txtPhrase.toLowerCase()} <u><b>is not</b></u> a palindrome!`;
+            };            
+        }
+
+        
+       
+
+    </script>
+</body>
+</html>
