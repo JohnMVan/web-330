@@ -26,5 +26,5 @@ function setDefaultTheme() {
 
 function setSelectedTheme()
 {
-    document.body.classList.value = localStorage.getItem(key, "mode") || "light-theme";
+    document.body.classList.value = localStorage.getItem("mode") || "light-theme";
 }
