@@ -1,0 +1,18 @@
+/*
+============================================
+; Title:  restaurant.css
+; Author: John Vanhessche
+; Date:   28 August 2022
+; Description: additional styling for restaurant.html
+;===========================================
+*/
+
+/*
+* To create the grid styling per instructions.  Used example from WEB2131: week-9 
+*/
+.menu-area {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px;
+    gap: 10px;
+}
