@@ -1,0 +1,122 @@
+<!--
+    ===============================
+    Title: vanhessche-calorie.html
+    Author: John Vanhessche
+    Date: 4 September 2022
+    Description: vanhessche-calorie.html for calorie app
+    ===============================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css"/>
+    <link rel="stylesheet" type="text/css" href="../site.css"/>
+    <link rel="stylesheet" type="text/css" href="./vanhessche-calorie.css"/>     <!--this will need to be changed to the weekly css file-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>WEB 330 - Enterprise JavaScript II</title>
+</head>
+<body class="light-theme">
+    <!--container wrapper for a card.-->
+    <div class="assign-container">
+        <h1 class="app-header">Calorie Search Form</h1>
+
+        <!--container wrapper for form-->
+        <div class="assign-content">
+            
+            <!--card with a card title and card content-->
+            <div class="card">
+                <div class="card-title"></div>
+                <div class="card-content">
+                    <div class="form">
+                        <div class="form-field">
+                            <label for="txtMyName">Enter a food item: </label>
+                            <input type="text" class="input" id="txtFoodItem" name="myName" />
+                            <br>
+                            <span id = foodList><em>(Ex: Egg, Apple, Hamburger, Fries, Banana, Soda)</em></span>
+                        </div>
+
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnSearch">Submit</button>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <br>
+            <a class="return-home" href="../index.html">Return</a>
+            <!--end card-->
+        </div>
+        <!--end assign-content-->
+        
+    </div>  
+    <!--end assign-container-->
+
+    <!--container wrapper for a card-->
+    <div class="assign-container">
+
+        <!--container wrapper for a card-->
+        <div class="assign-content">
+
+            <!--card with a card title, card content, and assign-results-text-->
+            <div class="card">
+                <div class="card-title">Search Results</div>
+
+                <div class="card-content assign-results-text">
+                    <div id="assign-results-header"></div>
+                    <div id="assign-results" class="assign-results-text"></div>
+                    <th id="searchResultsTh">
+                        <td id="searchResultsTb">                            
+                        </td>
+                    </th>                   
+                </div>
+            </div>
+            
+            <!--end card-->
+        </div>
+        <!--end assign-content-->
+    </div>
+    <!--end assign-container-->
+    <script type="module">
+        
+        setSelectedTheme();
+
+        import {CalorieConverter} from "./calorie-converter.js";
+        
+        //9/4/2022 this all needs to be redone following discussion with professor.
+        
+        document.getElementById("btnSearch").onclick = function () 
+        {  
+            let txtFoodItemEL = document.getElementById("txtFoodItem").value;
+            console.log("value of txtFoodItemEL is " + txtFoodItemEL)
+            //let txtFoodItem = txtFoodItemEL;            
+            let foods = find(txtFoodItemEL.toLowerCase());             
+                            
+            if(foods === true) 
+            {
+                console.log("Getting here because its true")                
+            } else 
+            {
+                console.log("getting here becasue it's false");
+            }
+
+        }; 
+
+        let foodList = data;
+        console.log(foodList);
+        let foodListData = `<i></i>`;
+        for (let item of foodList ) 
+        {
+            console.log(food.name);
+        }
+
+
+        
+       
+    </script>
+</body>
+</html>

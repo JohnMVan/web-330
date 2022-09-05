@@ -1,0 +1,17 @@
+/*
+============================================
+; Title:  vanhessche-calorie.css
+; Author: John Vanhessche
+; Date:   2 September 2022
+; Description: additional styling for vanhessche-calorie.html
+;===========================================
+*/
+
+/*add per instructions*/
+
+#foodList {
+    float: right;
+    color: #df546a;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
