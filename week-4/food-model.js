@@ -8,7 +8,10 @@
  */
 
 
-/*add per instructions*/
+/*add per instructions.  
+* Created class called FoodModel, with a constructor containing three parameters:  id, name, calories
+* we're exporting the class using the export key word.
+*/
 export class FoodModel {
     constructor(id, name, calories) {
         this.id = id;

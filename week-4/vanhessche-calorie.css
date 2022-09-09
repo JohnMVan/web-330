@@ -7,8 +7,9 @@
 ;===========================================
 */
 
-/*add per instructions*/
-
+/*add per instructions
+*Adding a css entry of #foodList and giving it the following attributes.
+*/
 #foodList {
     float: right;
     color: #df546a;

@@ -35,10 +35,10 @@
                 <div class="card-content">
                     <div class="form">
                         <div class="form-field">
-                            <label for="txtMyName">Enter a food item: </label>
+                            <label class="txtMyName">Enter a food item: </label>
                             <input type="text" class="input" id="txtFoodItem" name="myName" />
                             <br>
-                            <span id = foodList><em>(Ex: Egg, Apple, Hamburger, Fries, Banana, Soda)</em></span>
+                            <span id = "foodList"></span>
                         </div>
 
                         <div class="form-field">
@@ -69,10 +69,12 @@
                 <div class="card-content assign-results-text">
                     <div id="assign-results-header"></div>
                     <div id="assign-results" class="assign-results-text"></div>
-                    <th id="searchResultsTh">
-                        <td id="searchResultsTb">                            
-                        </td>
-                    </th>                   
+                    <table>
+                        <tr>
+                            <th class="searchResults"></th>
+                            <td class="searchResults"></td>                          
+                        </tr>                         
+                    </table>                                     
                 </div>
             </div>
             
@@ -83,39 +85,103 @@
     <!--end assign-container-->
     <script type="module">
         
+        //setting theme based on user setting from index.html
         setSelectedTheme();
 
+        //Adding import statement for the CalorieConverter class.
         import {CalorieConverter} from "./calorie-converter.js";
+
+        //Creating variable named txtFoodItemEL and assigning it to the txtFoodItem input field.
+        let txtFoodItemEL = document.getElementById("txtFoodItem");
         
-        //9/4/2022 this all needs to be redone following discussion with professor.
-        
-        document.getElementById("btnSearch").onclick = function () 
-        {  
-            let txtFoodItemEL = document.getElementById("txtFoodItem").value;
-            console.log("value of txtFoodItemEL is " + txtFoodItemEL)
-            //let txtFoodItem = txtFoodItemEL;            
-            let foods = find(txtFoodItemEL.toLowerCase());             
-                            
-            if(foods === true) 
+        //Registering an onclick event for the btnSearch field suing the document.getElementById function.
+        document.getElementById("btnSearch").onclick = function() 
+        {              
+            //creating a variable named txtFoodItem and assigning it to the inputted value.
+            let txtFoodItem = txtFoodItemEL.value;
+
+            //creating variable named foods and calling the static function find from the 
+            //CalorieConverter class.  We are using JS's toLowerCase() to lower case the passed in value.
+            let foods = CalorieConverter.find(txtFoodItem.toLowerCase());
+
+            //Creating a variable named tableData and building the output string to represent an HTML table.  
+            //To build table we build <table><tr><th> for the table headers of Name and Calories.
+            //Notice we don't close the table (no ending </table> tag), because we need to append the results from the 
+            //find function first.
+            let tableData = `<table><tr><th>Name</th><th>Calories</th></tr>`;
+
+            //Using a for...of loop, we iterate over the foods variable (containing the filtered array from the static find 
+            //function, and populating teh table rows with table data.  For the table data we are returning name and calories.
+            
+            for(let food of foods)
             {
-                console.log("Getting here because its true")                
-            } else 
-            {
-                console.log("getting here becasue it's false");
+                //We're then continuing with building the string by appending the tableData variable with the results of the loop.
+                //notice the ``, and the += append aperator.
+                tableData += `<tr><td>${food.name}</td><td>${food.calories}</td></tr>`
             }
+            
+            //Outside of the tableData string (basically outside the for loop), we're closing the opening <table> tag, 
+            // and binding the results to the searchResults <div>
+            //To understand what's going on with tableData, you have to visualize how this variable "changes" throughout 
+            //the function.  On line 113 we create it with the initial table structure.  then on line
+            //120 we add to it, then add ot it again on line 125.
+            tableData += `</table>`
 
-        }; 
-
-        let foodList = data;
-        console.log(foodList);
-        let foodListData = `<i></i>`;
-        for (let item of foodList ) 
-        {
-            console.log(food.name);
+            //Finally we write the bind the results of tableData to the searchResults id.  
+            document.getElementById("searchResults").innerHTML = tableData;
         }
 
+        //Register an event listener for 'keyup'  Notice how we're using EventListener and not getElementById like we do
+        //with the mouse click.  
+        document.addEventListener('keyup', function(e)
+        {   
+            //We're adding an if statement to check if the enter was key was pressed. Enter is a keyboard event.key.
+            if(e.key === "Enter")
+            {
+                //The preventDefault() line is added simply to avoid passing the 'new line' character to the function.  New line
+                //is the default behavior of the enter key.  This ensures we're passing the value of the input box.
+                //Not in instructions, but shown during demo with instructor.
+                event.preventDefault();
 
+                //If the enter key was pressed we invoke the click() function.  In essence we're simulating a mouse click here
+                //i.e. treating the enter press as a mouse click then invoking the mouse click (onclick) event.  
+                //This calls the onclick event from above.  it knows this because of the "btnSearch" id we're passing.  Notice
+                //how this isn't a function, but a call.
+                document.getElementById("btnSearch").click();
+            }
+        })
+
+        //This next block of code is appending the foodList span on line 41.  Basically we're looping through the data array
+        //on the CalorieConverter class, and accessing the name property of each food item on that array.
+
+        //Creating a variable named foodList and assigning (calling) the static data function from CalorieConverter.  This will
+        //hold the data array.
+        let foodList = CalorieConverter.data;
         
+        //Creating a variable named foodListData and budding and HTML string for the list of available food items.
+        //We are using the <i> tag to make it italic.  The foodListData variable changes throughout this process, much like the tableData
+        //variable in the function above.  (Ex: Egg, Apple, Hamburger, ....), with opening and closing ().
+        //The first part of the string should look like this:  
+        let foodListData = `<i>(Ex: `;
+
+        //Using a for....of loop, we append the item.name property to the variable string (foodListData) followed by a , . 
+        for (let item of foodList ) 
+        {            
+            //notice the use of the += for the append.
+            foodListData += `${item.name}, `
+        } 
+        
+        //Not on the instructions, but something we need to do to clean up the foodListData string. This line removes the , and 
+        //space after the last item of the foodListData.  It's using the substring method starting at position 0, and ending at 
+        //however long the array is, then removing the last 2 items.  Could we have used the .slice() method here? 
+        foodListData = foodListData.substring(0, foodListData.length -2);
+
+        //Also not on instruction, but again necessary to complete the string.  We modify foodListData variable by 
+        //closing the ) and ending the italic tag.  
+        foodListData += `)</i>`;
+
+        //Outside of the for loop, bind the results of the foodList innerHTML with the foodListData variable string.  
+        document.getElementById("foodList").innerHTML = foodListData;
        
     </script>
 </body>

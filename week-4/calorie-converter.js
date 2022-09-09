@@ -7,24 +7,37 @@
  * ====================================
  */
 
+//Adding an import statement to the FoodModel
 import { FoodModel } from "./food-model.js";
 
+//Creating a class called CalorieConverter with a static variable called data, and a static function, and exporting the class.  
 export class CalorieConverter {
 
-    //I didn't know how to use the food-model class to populate this array, without getting syntax errors.  What do i need to do here?
+    //for the static variable we are populating it with 6 FoodModel objects with the values shown below.  the new keyword creates
+    //the object.  Notice that data is actually an array [].
     static data = [
-        {id: 1007, name: "Egg", calories: 78},
-        {id: 1008, name: "Apple", calories: 95}, 
-        {id: 1009, name: "Hamburger", calories: 354}, 
-        {id: 1010, name: "Fries", calories: 400},
-        {id: 1011, name: "Banana", calories: 105},
-        {id: 1012, name: "Soda", calories: 150}    
+        new FoodModel(1007, "Egg", 78),
+        new FoodModel(1008, "Apple", 95), 
+        new FoodModel(1009, "Hamburger", 354), 
+        new FoodModel(1010, "Fries", 400),
+        new FoodModel(1011, "Banana", 105),
+        new FoodModel(1012, "Soda", 150)    
     ];
 
-    // I don't think this is right either.  All I get is true or false being returned, and not the newArr.
-    static find(string) {        
-        return newArr = data.filter(string => string===data.name); 
-                  
+    // Ok, I think I understand this function now.  originally I was trying to return a new array such as:
+    //return newArr data.filter......  
+    //Actually what this function is doing is returning the data array from above, but filtered for just the name of the food
+    //item passed to it.  It's the same array, not a new array.  
+    //This function returns the data array filtered for the food item passed to it.
+
+    //creating a static function called find with a single string parameter (the name of the food item being passed to it).  
+    //we are using the built in filter() method to return the data array with just the object matching the name parameter.
+    //We're using the FoodModel name property to compare to the string parameter.  
+    //We're essentially returning the data array, but in a filtered state. 
+    static find(name) {        
+        return this.data.filter(item => item.name.toLowerCase().includes(name));
     };
-}
+};
+
+
 
