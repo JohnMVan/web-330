@@ -1,0 +1,22 @@
+/*
+============================================
+; Title:  vanhessche-bobs-auto-repair.css
+; Author: John Vanhessche
+; Date:   9 September 2022
+; Description: additional styling for bobs auto repair.
+;===========================================
+*/
+
+/*add #cart-message, float div to right, text color df546a, font 12px, spacing 2px   */
+#cart-message {
+    float: right;
+    color: #dF546A;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/*using the psuedo hover class, setting hover of the <i> element to a cursor with a pointer*/
+i:hover {
+    cursor: pointer;
+}
+

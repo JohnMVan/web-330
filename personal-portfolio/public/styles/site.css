@@ -1,0 +1,70 @@
+/*
+* Title:  site.css
+*Author:  John Vanhessche
+*Date 9 September 2022
+*Desc:  site.css file for personal portfolio
+*/
+
+body.theme {
+    --primary-color: #d5dadb;
+    --accent-color: #516478;
+    --warm-color: #f51400;  
+}
+
+.header {    
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--primary-color);
+    width: 100%;
+}
+
+.navigation {
+    float: left;
+    display: block;   
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    border: 1px solid var(--primary-color);    
+    width: 100%;
+}
+
+.navlinks {
+    padding: 30px;
+    text-decoration: none;
+    text-decoration-color: black;
+}
+
+.row {
+    float:left;
+    width: 100%;
+    padding: 15px;
+    display: block;
+    text-align: center;    
+    border: 1px solid var(--primary-color);
+}
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    float: left;
+    padding: 15px;
+    display: block;    
+    text-align: center;
+    width: 33%;
+}
+
+.footer {
+    background-color: var(--primary-color);    
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--accent-color);
+    width: 100%;   
+}
+
+button {
+    color: var(--primary-color);
+}

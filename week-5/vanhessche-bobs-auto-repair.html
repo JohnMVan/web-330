@@ -1,0 +1,142 @@
+<!--
+    ===============================
+    Title: vanhessche-......html
+    Author: John Vanhessche
+    Date: date
+    Description: description
+    ===============================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css"/>
+    <link rel="stylesheet" type="text/css" href="../site.css"/>
+    <link rel="stylesheet" type="text/css" href="./vanhessche-bobs-auto-repair.css"/>     <!--this will need to be changed to the weekly css file-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>WEB 330 - Enterprise JavaScript II</title>
+</head>
+<body class="light-theme">
+    <!--container wrapper for a card.-->
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to Bob's Automotive Repair Shop!</h1>
+
+        <!--container wrapper for form-->
+        <div class="assign-content">
+            
+            <!--card with a card title and card content-->
+            <div class="card">
+                <div class="card-title">Product Listing</div>
+                <cart-component></cart-component>
+                <div class="card-content">
+                    <div class="form">
+                        <div class="form-field">
+                            <label for="txtMyName">Choose a product: </label>
+                            <select id="productList" class="drop-down-menu">
+                                <option value="select">--Select--</option>
+                                <option value="19.99">Oil Change</option>
+                                <option value="18.44">Filter Replacement</option>
+                                <option value="9.99">Wiper Fluid Refill</option>
+                            </select>
+                            <br>
+                            <i id="cart-message"></i>       
+                        </div> <!--end form-field div-->
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnAddProduct">Add to cart</button>
+                        </div>  <!--end button div-->
+                    </div>  <!--end form div--> 
+                                     
+                </div>
+            </div>
+            <!--end card-->
+            <br>
+            <a class="return-home" href="../index.html">Return</a>
+        </div>
+        
+        <!--end assign-content-->
+        
+    </div>  
+    <!--end assign-container-->
+
+    <!--container wrapper for a card-->
+    <div class="assign-container">
+
+        <!--container wrapper for a card-->
+        <div class="assign-content">
+
+            <!--card with a card title, card content, and assign-results-text-->
+            <div class="card">
+                <div class="card-title">Shopping Cart</div>
+                <div class="card-content assign-results-text">
+                    <table>
+                        <tr>
+                            <th id="shoppingCart"></th>
+                            <td id="shoppingCart"></td>
+                        </tr>
+                    </table>
+                    <div id="assign-results-header"></div>
+                    <div id="assign-results" class="assign-results-text"></div>                   
+                </div>
+            </div>
+            
+            <!--end card-->
+        </div>
+        <!--end assign-content-->
+    </div>
+    <!--end assign-container-->
+    <script type="module">
+        
+        //setting selected theme
+        setSelectedTheme();
+
+        //add import statements from Product and ShoppingCart classes
+        import { Product } from "./product.js";
+        import { ShoppingCart } from "./shopping-cart.js";
+
+        //Make a new ShoppingCart object and assign to a variable named shoppingCart
+        let shoppingCart = new ShoppingCart();
+
+        function setCartCount() 
+        {
+            let number = ShoppingCart.count();
+            document.getElementById("cart-count").innerHTML = number;
+        }
+
+        document.getElementById("btnAddProduct").onclick() 
+        {
+            let productList = document.getElementById("productList");
+            let product = productList.options[productList.selectedIndex].text;
+            let productValue = productList.options[productList.selectedIndex].value;
+
+            if(product === !"--Select--")
+            {
+                ShoppingCart.add(product, productValue)     //there are not two arguments to this function in the class.
+                setCartCount();
+                window.alert(`${product} was added to your shopping cart!`);
+                productList.option = "select";
+            }
+        }
+
+        document.getElementById("cartIcon").onclick() 
+        {
+            let cartDisplayTable = `<table><tr><th>ID</th><th>Name</th><th>Price</th></tr>`
+            for(it of ShoppingCart)
+            {
+                cartDisplayTable += it.Product;
+            }
+            cartDisplayTable += `</table>`
+            document.getElementById("shoppingCart").innerHTML = cartDisplayTable;
+        }
+
+        function setCartCount() 
+        {
+            document.getElementById("cart-count").innerHTML = count();
+        }
+    </script>
+</body>
+</html>
