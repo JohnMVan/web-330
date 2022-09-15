@@ -20,7 +20,7 @@
         this.name = name;
         this.price = price; 
         
-        //adding a new property called id, and assigning it a random number.  TODO:  may need to fix.      
+        //adding a new property called id, and assigning it a random number.         
         this.id = Math.random().toString(16).slice(2);       
     }    
  }

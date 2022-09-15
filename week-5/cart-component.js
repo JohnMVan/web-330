@@ -19,11 +19,11 @@ class CartComponent extends HTMLElement
     
     //Add a function named Callback() and set the innerHTML to a string for the font awesome shopping cart
 
-    Callback()
+    connectedCallback()
     {
         this.innerHTML = `<i id="cartIcon" class="fa fa-shopping-cart"></i> (<span id="cart-count"></span>)`;
     }
 }
-//Outside the class declaration, call the customElements.define() functiona nd pass in the string value cart-component,
+//Outside the class declaration, call the customElements.define() function and pass in the string value cart-component,
 //and the CartComponent class.
-customElements.define("cart-component", CartComponent);        // TODO  I"m sure this doesn't work.
+customElements.define("cart-component", CartComponent);         

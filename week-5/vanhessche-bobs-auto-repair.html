@@ -1,9 +1,9 @@
 <!--
     ===============================
-    Title: vanhessche-......html
+    Title: bobs-auto-repair.html
     Author: John Vanhessche
-    Date: date
-    Description: description
+    Date: 9 September 2022
+    Description: html page for bob's auto repair
     ===============================
 -->
 
@@ -18,7 +18,8 @@
     <link rel="stylesheet" type="text/css" href="./vanhessche-bobs-auto-repair.css"/>     <!--this will need to be changed to the weekly css file-->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-    <script type="application/javascript" src="../theme.js"></script>     
+    <script type="application/javascript" src="../theme.js"></script>  
+    <script type="application/javascript" src="./cart-component.js"></script>   
     <title>WEB 330 - Enterprise JavaScript II</title>
 </head>
 <body class="light-theme">
@@ -31,12 +32,16 @@
             
             <!--card with a card title and card content-->
             <div class="card">
-                <div class="card-title">Product Listing</div>
-                <cart-component></cart-component>
+                <div class="card-title">Product Listing
+                    <br/>
+                    <cart-component></cart-component>
+
+                </div>
+                
                 <div class="card-content">
                     <div class="form">
                         <div class="form-field">
-                            <label for="txtMyName">Choose a product: </label>
+                            <label class="txtMyName">Choose a product: </label>
                             <select id="productList" class="drop-down-menu">
                                 <option value="select">--Select--</option>
                                 <option value="19.99">Oil Change</option>
@@ -76,7 +81,7 @@
                     <table>
                         <tr>
                             <th id="shoppingCart"></th>
-                            <td id="shoppingCart"></td>
+                            <td class="shoppingCart"></td>
                         </tr>
                     </table>
                     <div id="assign-results-header"></div>
@@ -101,33 +106,28 @@
         //Make a new ShoppingCart object and assign to a variable named shoppingCart
         let shoppingCart = new ShoppingCart();
 
-        function setCartCount() 
-        {
-            let number = ShoppingCart.count();
-            document.getElementById("cart-count").innerHTML = number;
-        }
-
-        document.getElementById("btnAddProduct").onclick() 
+        document.getElementById("btnAddProduct").onclick = function() 
         {
             let productList = document.getElementById("productList");
             let product = productList.options[productList.selectedIndex].text;
-            let productValue = productList.options[productList.selectedIndex].value;
+            let productValue = productList.options[productList.selectedIndex].value;   //will remove item from the select menu.
 
-            if(product === !"--Select--")
+            if(product !== "--Select--")
             {
-                ShoppingCart.add(product, productValue)     //there are not two arguments to this function in the class.
+                let newProduct = new Product(product, productValue);
+                shoppingCart.add(newProduct);    //accessing add function on shopping-cart.js
                 setCartCount();
                 window.alert(`${product} was added to your shopping cart!`);
-                productList.option = "select";
+                document.getElementById("productList").value = "select";     //returning the select value back to the drop down menu.
             }
         }
 
-        document.getElementById("cartIcon").onclick() 
+        document.getElementById("cartIcon").onclick = function() 
         {
             let cartDisplayTable = `<table><tr><th>ID</th><th>Name</th><th>Price</th></tr>`
-            for(it of ShoppingCart)
+            for(let product of shoppingCart)   //calling iterator from shopping cart class.
             {
-                cartDisplayTable += it.Product;
+                cartDisplayTable += `<tr><td>${product.id}</td><td>${product.name}</td><td>${product.price}</td></tr>`;
             }
             cartDisplayTable += `</table>`
             document.getElementById("shoppingCart").innerHTML = cartDisplayTable;
@@ -135,7 +135,7 @@
 
         function setCartCount() 
         {
-            document.getElementById("cart-count").innerHTML = count();
+            document.getElementById("cart-count").innerHTML = shoppingCart.count().toString();
         }
     </script>
 </body>
