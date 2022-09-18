@@ -1,9 +1,16 @@
 <!--
-    title:  index.html
+    Title:  index.html
+    Date:  18 September 2022
     Author:  John Vanhessche
-    Date:  9 September 2022
-    Desc:  index.html for personal profile.
+    Desc:  index.html for personal profile page
+
+    Updates:
+    9/17/2022:  Didn't like how my original personal profile was turning out, so I decided to style it after a personal profile
+                I started building for a code camp last summer, but never finished..  This profile better captures my geekiness and 
+                growing up during the 1980's. There's a few things like the Poppins font family we aren't using in the class, 
+                but I don't care, it's my profile and i like the dot-matrix font I'm pulling from it.
 -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,41 +18,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet "type="text/css" href="../public/styles/site.css">
+    <meta name="keywords" content="John, Vanhessche, Profile, Site, web, software developer extraordinaire, the best guy, awesome"/>
+    <meta name="author" content="John Vanhessche"/>
+    <title>John's Profile Page</title>
+    <link rel="stylesheet" href="../public/styles/site.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="application/javascript" src="../public/js/index.js"></script>
-    <title>Vanhessche Portfolio</title>
 </head>
-<body>
-    <div class="header">  <!--header div start-->
-        <h1>John Vanhessche</h1>
-    </div>   <!--header div end-->
-    <div class="navigation">    <!--navigation div start-->
-        <button><a class="navlinks" href="./index.html">Home</a></button>
-        <button><a class="navlinks" href="./about.html">About</a></button>
-        <button><a class="navlinks" href="./resume.html">Resume</a></button>
-        <button><a class="navlinks" href="./projects.html">Projects</a></button>
-        <button><a class="navlinks" href="./database.html">Database Diagrams</a></button>
-        <button><a class="navlinks" href="./api-test.html">API Unit Testing</a></button>
-        <button><a class="navlinks" href="./bucket-list.html">Bucket List</a></button>
-    </div>   <!--navigation div end-->
-    <div class="row">  <!--content area start-->
-        <div class="column">
-            <h2>Landing Page</h2>
-            <p></p>
-        </div> <!--end column div-->
-    </div>   <!--end content area-->
-    <div class="footer">   <!--footer div start-->
-        <h2></h2>
-    </div>   <!--footer div end-->  
-    <footer>
-        <div class="quick-links">
-            <a href="www.github.com">GitHub</a>
-            <a href="www.bellevue.edu">Bellevue University</a>
-            <a href="www.youtube.com">YouTube Channel</a>
-            <a href="www.github.com">Course GitHub</a>
+<body>    
+    <div class="main_container">
+        <div class="main_banner">
+            <h1 class="main_banner_text">John Vanhessche</h1> 
         </div>
-    </footer>  
+        <div class="main_sidebar">
+            <br/>
+            <img class="main_sidebar_image" src="../public/images/1544645301309.jpg" alt="pic of john" title="face pic"/>
+            <br/>
+            <ul class="main_sidebar_ul">
+                <a class="main_sidebar_a" href="./about.html"><li class="main_sidebar_li">...About Me</li></a><br/>
+                <a class="main_sidebar_a" href="./projects.html"><li class="main_sidebar_li">...Current Projects</li></a><br/>
+                <a class="main_sidebar_a" href="./resume.html"><li class="main_sidebar_li">...Resume</li></a><br/>
+                <a class="main_sidebar_a" href="./database.html"><li class="main_sidebar_li">...Database</li></a><br>
+                <a class="main_sidebar_a" href="./api-test.html"><li class="main_sidebar_li">...API Testing</li></a><br>
+                <a class="main_sidebar_a" href="./bucket-list.html"><li class="main_sidebar_li">...Bucket bucket-list</li></a>                
+            </ul>           
+            <ul>
+                <a class="main_sidebar_a" href="index.html"><li class="main_sidebar_li"><em class="current_sel">...HOME</em></li></a>
+            </ul>
+        </div>        
+        <div class="main_content_area">            
+            <div class="main_content_video">                
+                <video width="500px" height="500px" autoplay loop muted>
+                    <source src="../public/images/mixkit-green-computer-code-scrolling-22760-medium.mp4" type="video/mp4">                    
+                </video>                         
+            </div>            
+        </div>
+        <div class="main_footer">
+            <p class ="main_footer_text">Created by John Vanhessche.  Click <a href ="john@email.com?subject="get a hold of me"><em class="main_footer_email">HERE</em></a> to email me.</p>
+        </div>
+    </div>    
 </body>
 </html>
