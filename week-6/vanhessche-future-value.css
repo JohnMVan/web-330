@@ -1,0 +1,21 @@
+/**
+ * Title: future-value.css
+ * Author:  John Vanhessche
+ * Date:  17 September 2022
+ * Desc: styling class for future value app
+ */
+
+
+/*added per instructions*/
+
+.danger {
+    float: right;
+    color: #df546a;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.form-label {
+    display: inline-block;
+    padding-top: 1rem;
+}

@@ -1,0 +1,196 @@
+<!--
+    ===============================
+    Title: vanhessche-......html
+    Author: John Vanhessche
+    Date: date
+    Description: description
+    ===============================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css"/>
+    <link rel="stylesheet" type="text/css" href="../site.css"/>
+    <link rel="stylesheet" type="text/css" href="./vanhessche-future-value.css"/>     <!--this will need to be changed to the weekly css file-->
+    <link rel="stylesheet" type="text/css" href="./flex-layout.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>WEB 330 - Enterprise JavaScript II</title>
+</head>
+<body class="light-theme">    
+
+
+
+    <div class="assign-container">  <!--start assign-container-->
+        <h1 class="app-header">Welcome to the Future Value App!</h1>
+        <div class="assign-content">  <!--start assign-content-->
+            <div class="card">   <!--start card-->
+                <div class="card-title">Future Value Calculator</div>
+                <br>
+                <div class="col-12 danger" id="errorLog"></div>   <!--blank row-->
+                <div class="card-content">  <!--start card-content-->
+                    <div class="form">     <!--start form-->
+                        <div class="form-field">   <!--start form field-->
+                            <label class="5-col form-label" for="txtMonthlyPayment">Monthly Payment: </label>
+                            <input class="7-col input" type="text" id="txtMonthlyPayment"/>
+                        </div>  <!--end form field-->
+                        <div class="form-field">   <!--start form field-->                         
+                            <label class="5-col form-label" for="txtYearlyRate">Interest Rate: </label>
+                            <input class="7-col input" type="text" id="txtYearlyRate"/>
+                            <br>
+                            <i class="danger">Enter 11% as 11.1</i>
+                        </div>  <!--end form field-->
+                        <div class="form-field">    <!--start form field-->
+                            <label class="5-col form-label" for="listNumOfYears">Number of Years: </label>
+                            <select class="7-col drop-down-menu" id="listNumOfYears">  <!--start select-->
+                                <option value="select">--Select--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>  <!--end select-->
+                        </div>  <!--end form field-->
+                        <div class="form-field">   <!--start form-field-->
+                            <button class="btn btn-primary full-width" id="btnCalculate">Calculate/button</button>
+                        </div>  <!--end form-field-->
+                    </div>   <!--end form-->                
+                </div>   <!--end card-content-->
+            </div>   <!--end card-->            
+            <br><br>
+            <a class="return-home" href="../index.html">Return</a>
+        </div>  <!--end assign-content-->        
+    </div>   <!--end assign-container-->
+    
+
+    
+    <div class="assign-container">   <!--start assign-container-->
+        <div class="assign-content">   <!--start assign-content-->
+            <div class="card">   <!--start card-->
+                <div class="card-title">   <!--start card-title-->
+                    Calculation as of <span id="today">date</span>
+                </div>   <!--end card title-->
+                <div class="card-content assign-results-text" id="futureValue">  <!--start assign-results-text-->
+                    <div id="assign-results-header"></div>
+                    <div id="assign-results" class="assign-results-text"></div>                   
+                </div>   <!--end assign-results-text-->
+            </div>    <!--end card-->
+        </div>    <!--end assign-content-->
+    </div>    <!--end assign-container-->
+
+
+
+
+    <script type="module">
+        //Set theme based on index.html selection
+        setSelectedTheme();
+
+        //importing classes
+        import { FinanceCalculator } from './finance-calculator.js';
+        import { Validator } from './validator.js';       
+
+        //creating todays date in en-us format and assigning to the today element
+        document.getElementById('today').innerHTML = new Date().toLocaleDateString('en-US');
+
+        //button event start
+        document.getElementById('btnCalculate').onclick = function() 
+        {
+            //monthlyPayment variable populated with value of monthly payment user enters.
+            let monthlyPayment = document.getElementById('txtMonthlyPayment').value;
+
+            //rate variable populated with rate user enters
+            let rate = document.getElementById('txtYearlyRate').value;
+
+            //years variable populated with years user enters
+            let years = document.getElementById('listNumOfYears').value;
+
+            //selecting errorLog element and assigning to variable.  This will be populated later in an error exists
+            let errorLogEl = document.getElementById('errorLog');
+
+            // instantianating a new Validator class, passing name, and field.
+            let monthlyPaymentValidator = new Validator("Monthly Payment", monthlyPayment);
+
+            //adding monthly payments to the methods on Validator class
+            monthlyPaymentValidator.addRequiredField();
+            monthlyPaymentValidator.addRequiredFloatField();
+            monthlyPaymentValidator.addFloatMinField();
+
+            //creating a new Validator class for interest rate passing name and field.
+            let rateValidator = new Validator("Interest Rate", rate);
+
+            //adding the rate to the methods on Validator
+            rateValidator.addRequiredField();
+            rateValidator.addRequiredFloatField();
+            rateValidator.addFloatMaxField();
+
+            //creating an empty string to hold error messages created from Validator
+            let errorLog = [];
+
+            //looping through monthlypayment to check for error, if present push to the errorLog array.
+            if(!monthlyPaymentValidator.validate())
+            {
+                for(let msg of monthlyPaymentValidator.messages)
+                {
+                    errorLog.push(msg);
+                }
+            }
+
+            //looping through rate to check for error, if present push to the errorLog array.
+            if(!rateValidator.validate())
+            {
+                for(let rateMsg of rateValidator.messages)
+                {
+                    errorLog.push(rateMsg);
+                }
+            }
+
+            //looping through monthly payment and rate, if present (true), calculating future value.
+            if(monthlyPaymentValidator.validate() && rateValidator.validate())
+            {
+                //clearing the errorLogEL
+                errorLogEl.innerHTML = "";
+
+                //calculating future value and assigning to variable.  TODO:  this probably needs to be fixed.
+                let futureValue = calculateFutureValue(monthlyPayment, rate, years);
+
+                //binding futureValue result to  futureValue element in html.  Setting decimal to 2 places.
+                document.getElementById('futureValue').innerHTML = `$ ${futureValue.toFixed(2)}`                
+            }
+
+            //in the event the if header returns false...meaning the required fields aren't present.
+            else 
+            {
+
+                //clearing errorLogEl
+                errorLogEl.innerHTML = "";
+
+                //begin writing the error as an unordered list.
+                let errorLogMessage = `<ul>`
+
+                
+                for(let msg of errorLog)
+                {
+                    errorLogMessage += `<li>${msg}</li>`;
+                }
+
+                errorLogMessage += `</ul>`;
+
+                //binding error log to html.
+                errorLog.innerHTML = errorLogMessage;
+            }                
+        }
+
+    </script>
+
+</body>
+</html>
