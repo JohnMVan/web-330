@@ -92,62 +92,69 @@
 
 
     <script type="module">
+
+        //This program returns a future value based on the user supplying a monthly payment amount, an interest rate
+        //for a number of years that the user selects.  
+
         //Set theme based on index.html selection
         setSelectedTheme();
 
-        //importing classes
+        //importing classes.  The FinanceCalculator will be used to calculate the future value and convert the future value
+        //to the USD currency format.  The Validator class will be used to check the monthly payment, interest rate for 
+        //good data??  
         import { FinanceCalculator } from './finance-calculator.js';
         import { Validator } from './validator.js';       
 
-        //creating todays date in en-us format and assigning to the today element
+        //Per instructions, creating todays date in en-us format and assigning to the today element.  This will be displayed
+        //in the results area as part of the "Calculation as of " in the html.  The returned data will bind to the 'today'
+        //span element.
         document.getElementById('today').innerHTML = new Date().toLocaleDateString('en-US');
 
-        //button event start
-        document.getElementById('btnCalculate').onclick = function() 
-        {
-            //monthlyPayment variable populated with value of monthly payment user enters.
+        //Function to execute when the user clicks on teh Submit button
+        document.getElementById('btnCalculate').onclick = function() {
+
+            //We are grabbing the monthly payment the user enters and assigning it to the monthlyPayment variable.
             let monthlyPayment = document.getElementById('txtMonthlyPayment').value;
 
-            //rate variable populated with rate user enters
+           //We are grabbing the interest rate user enters and assigning it to the rate variable.
             let rate = document.getElementById('txtYearlyRate').value;
 
-            //years variable populated with years user enters
+           //We are grabbing the number of years selected by the user and assigning it to the years variable.
             let years = document.getElementById('listNumOfYears').value;
 
-            //selecting errorLog element and assigning to variable.  This will be populated later in an error exists
+            //There is a div in the html that we will display the errors on.  This is assigning that div to this element.
             let errorLogEl = document.getElementById('errorLog');
 
-            // instantianating a new Validator class, passing name, and field.
+            //We are creating a new instance of the Validator class and passing the monthlyPayment
             let monthlyPaymentValidator = new Validator("Monthly Payment", monthlyPayment);
 
-            //adding monthly payments to the methods on Validator class
+            //the monthlyPayment will run through the various add methods on the Validator class.  These methods are verifying
+            //the data is there (required) and correct.  Numbers are numbers, etc.
             monthlyPaymentValidator.addRequiredField();
             monthlyPaymentValidator.addRequiredFloatField();
             monthlyPaymentValidator.addFloatMinField();
 
-            //creating a new Validator class for interest rate passing name and field.
+            //We are creating another instance of the Validator class for the rate.
             let rateValidator = new Validator("Interest Rate", rate);
 
-            //adding the rate to the methods on Validator
+            //Running rate through the Validate methods, checking for correctness, existence....etc.
             rateValidator.addRequiredField();
             rateValidator.addRequiredFloatField();
             rateValidator.addFloatMaxField();
 
-            //creating an empty string to hold error messages created from Validator
+            //creating an empty string to hold error messages created from Validator.
             let errorLog = [];
 
-            //looping through monthlypayment to check for error, if present push to the errorLog array.
-            if(!monthlyPaymentValidator.validate())
-            {
-                for(let msg of monthlyPaymentValidator.messages)
+            //looping through monthly payment to check for error, if present push to the errorLog array.
+            if(!monthlyPaymentValidator.validate()) {
+                for(let msg of monthlyPaymentValidator.messages) 
                 {
                     errorLog.push(msg);
                 }
             }
 
             //looping through rate to check for error, if present push to the errorLog array.
-            if(!rateValidator.validate())
-            {
+            if(!rateValidator.validate()) {
                 for(let rateMsg of rateValidator.messages)
                 {
                     errorLog.push(rateMsg);
@@ -160,11 +167,12 @@
                 //clearing the errorLogEL
                 errorLogEl.innerHTML = "";
 
-                //calculating future value and assigning to variable.  TODO:  this probably needs to be fixed.
-                let futureValue = calculateFutureValue(monthlyPayment, rate, years);
+                //calculating future value and assigning to variable.  
+                let futureValue = FinanceCalculator.calculateFutureValue(monthlyPayment, rate, years);
+                
 
                 //binding futureValue result to  futureValue element in html.  Setting decimal to 2 places.
-                document.getElementById('futureValue').innerHTML = `$ ${futureValue.toFixed(2)}`                
+                document.getElementById('futureValue').innerHTML = `The future value is ${FinanceCalculator.convertToCurrency(futureValue)}`                
             }
 
             //in the event the if header returns false...meaning the required fields aren't present.
@@ -181,6 +189,7 @@
                 for(let msg of errorLog)
                 {
                     errorLogMessage += `<li>${msg}</li>`;
+                    console.log(errorLogMessage);
                 }
 
                 errorLogMessage += `</ul>`;
@@ -189,8 +198,6 @@
                 errorLog.innerHTML = errorLogMessage;
             }                
         }
-
     </script>
-
 </body>
 </html>

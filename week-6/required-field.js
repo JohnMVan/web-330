@@ -7,23 +7,22 @@
 
 
 //Checking for required fields.
-export class RequiredField 
-{
-    constructor(name, field)
-    {
+export class RequiredField {
+
+    constructor(name, field) {
         this.name = name;
         this.field = field;
     }
 
-    validate() 
-    {
+    validate() {
+
         //Returning true if this.field is a string, otherwise return false.
         return Boolean(this.field);
     }
 
-    getMessage() 
-    {
-        //checking for the presence of the name, and returning message if not found.
+    getMessage() {
+
+        //checking for the presence of the name (monthly payment), and returning message if not found.
         return `${this.name} is a required field`
     }
 }
