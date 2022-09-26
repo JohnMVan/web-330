@@ -1,0 +1,231 @@
+<!--
+    ===============================
+    Title: vanhessche-......html
+    Author: John Vanhessche
+    Date: date
+    Description: description
+    ===============================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css"/>
+    <link rel="stylesheet" type="text/css" href="../site.css"/>
+    <!--<link rel="stylesheet" type="text/css" href=".css"/>   this will need to be changed to the weekly css file-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>WEB 330 - Enterprise JavaScript II</title>
+</head>
+<body class="light-theme">
+    <!--container wrapper for a card.-->
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the WhatABook, Part 1 App</h1>
+
+        <!--container wrapper for form-->
+        <div class="assign-content">
+            
+            <!--card with a card title and card content-->
+            <div class="card">
+                <div class="card-title">Book Listing</div>
+                <div class="card-content" id="bookList">
+                    <!-- <div class="form">
+                        <div class="form-field">
+                            <label for="txtMyName">My Name: </label>
+                            <input type="text" class="input" id="txtMyName" name="myName" />
+                        </div>
+
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width">Submit</button>
+                        </div>
+                    </div>                     -->
+                </div>   <!--end card-content-->
+            </div>   <!--end card-->
+            <br><br>
+            <a class="return-home" href="../index.html">Return</a>
+        </div> <!--end assign-content-->        
+    </div>  <!--end assign-container-->
+
+    <!--container wrapper for a card-->
+    <div class="assign-container">
+
+        <!--container wrapper for a card-->
+        <div class="assign-content">
+
+            <!--card with a card title, card content, and assign-results-text-->
+            <div class="card">
+                <div class="card-title">Selected Book</div>
+                <div class="card-content" id="selectedBook"></div>
+            </div>            
+            <!--end card-->
+        </div>        
+        <!--end assign-content-->
+    </div>
+    <!--end assign-container-->
+    <script>
+        //Assignment of selected Theme from index.html
+        setSelectedTheme();
+
+        //This program displays a list of books in a table.  When you click on a book from the table, it displays information about that book below.
+        //The list of books are contained in the books.xml file.  
+        //program Order:  
+        // 1.  Access the books.xml file, then parse the data into text. 
+        // 2.  Create the upper table with the information from the books.xml file
+        // 3.  Loop through the table to make the elements of the table clickable.  Setting one element with <a> tag.
+        // 4.  When a user clicks on a table row, register the click event...this is probably setting some attribute too.
+        // 5.  Loop through the table to find the clicked row, then return the information contained in that row.
+        
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            //assigning file name variable to books.xml file
+            let fileName = "books.xml";
+
+            //Using fetch to get the books.xml resource.  Could also define this as fetch('./books.xml'), and
+            //not set the fileName variable, since this is the only time it's used.  
+            fetch(fileName)
+
+            //Here we are returning the promise object from the fetch API.
+            //We then use the .text() method to get a string from the file.  
+            .then(res => res.text())
+
+            //since the string is in XML, we need to parse the XML to return the data, then store the data
+            //in the xmlBooks variable.  The argument data represents the promise object from the
+            //preceding line.  
+            .then(data => {
+
+                //creating an instance of the DOMParser object, and assigning it to domParser.
+                //We'll use this object to parse the string data.
+                let domParser = new DOMParser();
+                let xmlBooks = domParser.parseFromString(data, 'text/xml');
+                
+                //now that we have the parsed string data, we call the function loadBooks, passing
+                //the string variable as the argument.
+                loadBooks(xmlBooks);
+
+                //Not sure why we're calling this function here, but it was expected in the directions.
+                addIsbnClickEvents();
+            })
+
+            //added the error catch since this was in other examples in the documentation.
+            //I suppose this would catch errors if the file couldn't be read or found.
+            .catch((error) => {
+                console.error('Error', error);
+            });
+            
+            //function to load the book data into a table at the top of the page (booklist div) 
+            //the argument xml represents the xmlBooks string object from above.          
+            function loadBooks(xml) {
+
+            //Here we are are looking at the xmlBooks string object, specifically at the <book> tag
+            //from the string data (can see the tag on the books.xml file), and assigning this to the
+            //books variable.  This is creating an HTMLCollection with 6 book elements (0-5)
+            let books = xml.getElementsByTagName("book");            
+
+            //the book items from the collection above will be displayed in a table.  In the following
+            //we are declaring the tableData variable and writing the HTML string output for the first 
+            //table row - which will be the table headers.  The opening <table> tag contains the id of
+            //'bookTable' and a class of 'table'.
+            let tableData = `<table id='bookTable' class='table'>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Pages</th>
+                    <th>Authors</th>
+                </tr>`;               
+            
+            //this the main for loop for the table.  We are iterating through the collection contained the books
+            //object.  For each book, we are finding the various tags (via getElementByTagName) and assigning
+            //the value (nodeValue) to the respective variables. Look at the books.xml file to see the tags.
+            for (let book of books) {
+                let isbn = book.getElementsByTagName('isbn')[0].childNodes[0].nodeValue;                
+                let title = book.getElementsByTagName('title')[0].childNodes[0].nodeValue;                
+                let description = book.getElementsByTagName('description')[0].childNodes[0].nodeValue;
+                let pages = book.getElementsByTagName('pages')[0].childNodes[0].nodeValue;
+                let authors = book.getElementsByTagName('authors')[0].childNodes[0].nodeValue;
+
+                //We then continue to update the tableData variable for each round of the for loop.  We first
+                //create the table row - which will contain the table data info.  We then build each table data
+                //for the different string elements - isbn, title, author...ect.  So, we're taking the variables
+                //assigned above and plopping them into a table data.  
+                //We're also assigning a data-value attribute to each table data row.  This will be accessed using field.dataset.value 
+                //in the anchorClicked() function below, to create the lower results box.
+                //We're also making the isbn data clickable by adding the <a> tag.
+                tableData += `<tr>
+                    <td data-value='ISBN'><a href='#' class='isbn-link'>${isbn}</a></td>
+                    <td data-value='Title'>${title}</td>
+                    <td data-value='Description'>${description}</td>
+                    <td data-value="Pages">${pages}</td>
+                    <td data-value='Authors'>${authors}</td>
+                    </tr>`;                    
+            };
+
+            //Closing table
+            tableData += `</table>`;
+
+            //Binding the tableData string with table information to the bookList div.
+            document.getElementById('bookList').innerHTML = tableData;
+        };
+
+
+        //this is function is called when the user click on the table and it registers adds a click event.  Called in the addIsbnClickEvents() function.
+        //passing the click event e as the argument.
+        function anchorClicked(e) {
+
+            //making sure that e resolves as a click and not anything else that a right mouse click might generate (context menu, copy....etc)
+            e.preventDefault();
+
+            //I don't know what the following items do.  These were added based on the instructions. I'm assuming these point to the cell that was
+            //selected on the table.  It selects the cell, and apparently the entire td row the cell belongs to.    
+            //Best guess.....the cell that was clicked from the addIsbnClickEvents() function were somehow registering these fields??? 
+            let self = this;
+            let cell = self.parentElement;
+            let row = cell.parentElement;
+            let data = row.querySelectorAll('td');
+
+            //Building an HTML string that will be displayed in the selectedBook div.  This will be an unordered list, without any *'s.
+            let bookData = `<ul style="list-style-type: none">`  
+
+            //looping through the data.......and accessing the data-value property of the row and adding that in bookData. 
+            //For the second part - the .textContent method.....found online that this method will return the content of the table element. This wasn't covered
+            //in the documentation so don't know if this is what the instructor is looking for, but it seems to work.  
+            for (let field of data) {
+                bookData += `<li><b>${field.dataset.value}:</b> ${field.textContent}</li>`
+            };
+
+            //closing the bookData ul.
+            bookData += `</ul>`
+
+            //binding bookData to the selectedBook div.
+            document.getElementById('selectedBook').innerHTML = bookData;
+        }
+
+        //This function adds the isbn click events.  
+        function addIsbnClickEvents() 
+        {
+            //we're adding click events if the user clicks on the table, or the actual isbn field.  Basically, if they click anywhere on the
+            //table, it will add that to the viewButtons variable. This creates a 6 element NodeList.  Not really sure what or why.  I'm guessing
+            //it's to make sure everything on the table is clickable, at least the elements in bookTable, tbody, and isbn-link.  I don't know where
+            //tbody is supposed to go (the table???). 
+            let viewButtons = document.querySelectorAll('#bookTable tbody .isbn-link');
+
+           //loop through the viewButtons NodeList, adding the click event and calling the anchorClicked function.  Why is this being done???
+            for(let index = 0; index < viewButtons.length; index++)
+            {
+                //I don't know what purpose this is for????
+                //This is creating something like this:  <a href='#' class='isbn-link'>9780345339683</a> when I console log it.
+                //My best guess is that there's some attribute that's being set to show that an item was clicked.  We then pass this 
+                //to anchorClicked() function.  
+                viewButtons[index].addEventListener("click", anchorClicked);                
+            }
+        }
+
+        });
+
+    </script>
+</body>
+</html>
