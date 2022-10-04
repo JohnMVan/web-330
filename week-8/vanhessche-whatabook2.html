@@ -1,0 +1,216 @@
+<!--
+    ===============================
+    Title: vanhessche-......html
+    Author: John Vanhessche
+    Date: date
+    Description: description
+    ===============================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../theme.css">
+    <link rel="stylesheet" type="text/css" href="../site.css">
+    <!--<link rel="stylesheet" type="text/css" href=".css"/>   this will need to be changed to the weekly css file-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <script type="application/javascript" src="../theme.js"></script>     
+    <title>WEB 330 - Enterprise JavaScript II</title>
+</head>
+<body class="light-theme">
+    <!--container wrapper for a card.-->
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the WhatABook, Part 2 App</h1>
+
+        <!--container wrapper for form-->
+        <div class="assign-content">
+            
+            <!--card with a card title and card content-->
+            <div class="card">
+                <div class="card-title">Book Listing</div>
+                <div class="card-content" id="bookList">
+                    <!-- <div class="form">
+                        <div class="form-field">
+                            <label for="txtMyName">My Name: </label>
+                            <input type="text" class="input" id="txtMyName" name="myName" />
+                        </div>
+
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width">Submit</button>
+                        </div>
+                    </div>                     -->
+                </div>   <!--end card-content-->
+            </div>   <!--end card-->
+            <br><br>
+            <a class="return-home" href="../index.html">Return</a>
+        </div> <!--end assign-content-->        
+    </div>  <!--end assign-container-->
+
+    <!--container wrapper for a card-->
+    <div class="assign-container">
+
+        <!--container wrapper for a card-->
+        <div class="assign-content">
+
+            <!--card with a card title, card content, and assign-results-text-->
+            <div class="card">
+                <div class="card-title">Selected Book</div>
+                <div class="card-content" id="selectedBook"></div>
+            </div>            
+            <!--end card-->
+        </div>        
+        <!--end assign-content-->
+    </div>
+    <!--end assign-container-->
+    <script type="module">        
+        //Assignment of selected Theme from index.html
+        setSelectedTheme();
+
+        //this is the import statement for the http-client.js class
+        import { HttpClient } from './http-client.js';
+
+        //creating 
+        const http = new HttpClient();
+
+        const isbns = [
+            '9780345339681',
+            '9780261103571',
+            '9780593099322',
+            '9780261102361',
+            '9780261102378',
+            '9780590302715',
+            '9780316769532',
+            '9780743273565',
+            '9780590405959'
+        ];
+
+        const params = {
+            "bibkeys": `ISBN:${isbns.join(",")}`,
+            "format": "json",
+            "jscmd": "details"
+        };
+
+        http.get("https://openlibrary.org/api/books", params)
+            .then((res) => {
+                console.log(res);
+                document.getElementById('bookList').innerHTML = buildHtmlString(res, 'table');
+                addIsbnClickEvents();
+        })
+        .catch(e => {
+            console.log(e);
+        });
+
+        function getBook(e) {
+            e.preventDefault();
+            let self = this;
+            let isbn = self.innerText; 
+            const params = {
+                "bibkeys": `ISBN:${isbns}`,
+                "format": "json",
+                "jscmd": "details"
+            };
+        
+            http.get("https://openlibrary.org/api/books", params).then((res) => {
+                console.log(res);
+                document.getElementById('selectedBook').innerHTML = buildHtmlString(res, 'ul');
+            })
+
+            .catch(e => {
+                console.log(e);
+            });
+        }
+
+        function buildHtmlString(res, format) {
+            let tableString = `<table id="bookTable"><tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Pages</th>
+                <th>Authors</th>
+                </tr>
+                <tbody>`;
+
+            let ulString = "";
+
+            for(let key in res)
+            {
+                ulString += `<ul style="list-style-type: none">`;
+
+                if(res.hasOwnProperty(key))
+                {
+                    let authors = [];
+                    if(res[key].details.authors)
+                    {
+                        authors = res[key].details.authors.map(function(author) {
+                            return author.name;
+                        })
+                    }
+
+                let book = {
+                    isbn: res[key].details.isbn_13 ? res[key].details.isbn_13 : res[key].details.isbn_10,
+                    title: res[key].details.title,
+                    description: res[key].details.subtitle ? res[key].details.subtitle : "N/A",
+                    pages: res[key].details.number_of_pages ? res[key].details.number_of_pages : "N/A",
+                    authors: authors.join(".")
+                }
+
+                ulString += 
+                    `<li><b>ISBN:</b> ${book.isbn}</li>
+                    <li><b>Title:</b> ${book.title}</li>
+                    <li><b>Description:</b> ${book.description}</li>
+                    <li><b>Pages:</b>${book.pages}</li>
+                    <li><b>Authors:</b> ${book.authors}</li>`;
+                
+                    tableString += 
+                    `<tr>
+                    <td><a href="#" class="isbn-link">${book.isbn}</a></td>
+                    <td>${book.title}</td>
+                    <td>${book.description}</td>
+                    <td>${book.pages}</td>
+                    <td>${book.authors}</td>
+                    </tr>`;
+                }
+            }
+            
+            
+            tableString += `</tbody></table>`
+            ulString += `</ul>`
+
+            if(format==='table') {
+                return tableString
+            } else {
+                return ulString
+            }
+        }
+        
+
+       
+
+        //This function adds the isbn click events.  
+        function addIsbnClickEvents() 
+        {
+            //we're adding click events if the user clicks on the table, or the actual isbn field.  Basically, if they click anywhere on the
+            //table, it will add that to the viewButtons variable. This creates a 6 element NodeList.  Not really sure what or why.  I'm guessing
+            //it's to make sure everything on the table is clickable, at least the elements in bookTable, tbody, and isbn-link.  I don't know where
+            //tbody is supposed to go (the table???). 
+            let viewButtons = document.querySelectorAll('#bookTable tbody .isbn-link');
+
+           //loop through the viewButtons NodeList, adding the click event and calling the anchorClicked function.  Why is this being done???
+            for(let index = 0; index < viewButtons.length; index++)
+            {
+                //I don't know what purpose this is for????
+                //This is creating something like this:  <a href='#' class='isbn-link'>9780345339683</a> when I console log it.
+                //My best guess is that there's some attribute that's being set to show that an item was clicked.  We then pass this 
+                //to anchorClicked() function.  
+                viewButtons[index].addEventListener("click", getBook);                
+            }
+        };
+
+
+    </script>
+</body>
+</html>

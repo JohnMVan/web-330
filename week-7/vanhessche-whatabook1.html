@@ -182,10 +182,13 @@
             //I don't know what the following items do.  These were added based on the instructions. I'm assuming these point to the cell that was
             //selected on the table.  It selects the cell, and apparently the entire td row the cell belongs to.    
             //Best guess.....the cell that was clicked from the addIsbnClickEvents() function were somehow registering these fields??? 
-            let self = this;
-            let cell = self.parentElement;
-            let row = cell.parentElement;
-            let data = row.querySelectorAll('td');
+            //Per Mr. Krasso..when user clicks on one of the links in the HTML table, we figure out which cell was selected, then we need
+            //to figure out the row that was selected, then finally capture the data from the cells in the row.
+
+            let self = this;    //a variable to hold a reference to this.
+            let cell = self.parentElement;   //a variable to hold a reference to the current cell in the html <table>
+            let row = cell.parentElement;   //a variable to hold a reference to the current row in the <table>
+            let data = row.querySelectorAll('td');  // a variable to store all of the data in the tables <td> elements
 
             //Building an HTML string that will be displayed in the selectedBook div.  This will be an unordered list, without any *'s.
             let bookData = `<ul style="list-style-type: none">`  
@@ -193,6 +196,7 @@
             //looping through the data.......and accessing the data-value property of the row and adding that in bookData. 
             //For the second part - the .textContent method.....found online that this method will return the content of the table element. This wasn't covered
             //in the documentation so don't know if this is what the instructor is looking for, but it seems to work.  
+            //  the for loop iterates over the data captures in the data variable.
             for (let field of data) {
                 bookData += `<li><b>${field.dataset.value}:</b> ${field.textContent}</li>`
             };
